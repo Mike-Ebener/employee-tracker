@@ -1,7 +1,11 @@
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS employees;
 
-CREAT TABLE departments (
+
+CREATE TABLE departments (
     id INTEGER NOT NULL,
-    d_name VARCHAR(30),
+    d_name VARCHAR(30) NOT NULL,
 )
 
 CREATE TABLE roles (
