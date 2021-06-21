@@ -29,6 +29,6 @@ VALUES
     (5, 'Blake', 'Worker', 3, 2),
     (6, 'Adam', 'Demamp', 4, 4),
     (7, 'Carl', 'Sketch', 3, 3),
-    (8, 'Dominic', 'Neighbor' 1, 2);
+    (8, 'Dominic', 'Neighbor', 1, 2);
 
     
