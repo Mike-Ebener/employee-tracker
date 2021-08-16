@@ -28,7 +28,7 @@ const db = mysql.createConnection(
   const promptProject = portfolioData => {
     console.log(`
   =================
-  Add a New Readme
+  Team work makes the dream work
   =================
   `);
   //^ Create a function to show the table
