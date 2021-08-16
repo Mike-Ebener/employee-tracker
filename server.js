@@ -11,6 +11,8 @@ const inquirer = require('inquirer');
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.json());
 
+
+
 const db = mysql.createConnection(
     {
       host: 'localhost',
@@ -36,13 +38,16 @@ const db = mysql.createConnection(
       name: "admin",
       message: "What do you want to do?",
       choices: [
-        "View All departments",
+        "View all departments",
         "View all employees",
+        "View all roles",
+        "Add employee",
+        "Update employee",
         ],
     }
   ]).then(choice => {
     console.log(choice);
-    if(choice.admin === "View All departments") {
+    if(choice.admin === "View all employees") {
       
       const sql = `SELECT * FROM employees`;
   
@@ -55,10 +60,119 @@ const db = mysql.createConnection(
             //   message: 'success',
             //   data: rows
             // });
-            console.log(rows);
+            console.table(rows);
             //console.table above
           });
     }
+    else if(choice.admin === "View all departments") {
+      const sql = `SELECT * FROM departments`;
+  
+          db.query(sql, (err, rows) => {
+            if (err) {
+              // res.status(500).json({ error: err.message });
+              return;
+            }
+            // res.json({
+            //   message: 'success',
+            //   data: rows
+            // });
+            console.table(rows);
+            //console.table above
+          });
+    }
+    else if(choice.admin === "View all roles") {
+      const sql = `SELECT * FROM roles`;
+  
+      db.query(sql, (err, rows) => {
+        if (err) {
+          // res.status(500).json({ error: err.message });
+          return;
+        }
+        // res.json({
+        //   message: 'success',
+        //   data: rows
+        // });
+        console.table(rows);
+        //console.table above
+      });
+
+    }
+    else if (choice.admin === "Add employee") {
+      const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
+      inquirer.prompt([
+        {
+          type: "input",
+          name: "first_name",
+          message: "What is the employee's first name?",
+        },
+        {
+          type: "input",
+          name: "last_name",
+          message: "What is the employee's last name?",
+        },
+        {
+          type: "input",
+          name: "role_id",
+          message: "What is the employee's role id?",
+        },
+        {
+          type: "input",
+          name: "manager_id",
+          message: "What is the employee's manager's id?",
+        },
+      ])
+      .then(employeeData => {
+        const employee = [employeeData.first_name, employeeData.last_name, employeeData.role_id, employeeData.manager_id]
+        db.query(sql, employee, (err, result) => {
+          if (err) {
+            return;
+          }
+          console.table(result)
+        });
+        
+      })
+    }
+    else if (choice.admin === "Update employee") {
+      const sql = "UPDATE employees SET first_name =?, last_name=?, role_id=?, manager_id=? WHERE id=?";
+      inquirer.prompt([
+        {
+          type: "input",
+          name: "employee_id",
+          message: "What is the employee's id?",
+        },
+        {
+          type: "input",
+          name: "first_name",
+          message: "What is the employee's first name?",
+        },
+        {
+          type: "input",
+          name: "last_name",
+          message: "What is the employee's last name?",
+        },
+        {
+          type: "input",
+          name: "role_id",
+          message: "What is the employee's role id?",
+        },
+        {
+          type: "input",
+          name: "manager_id",
+          message: "What is the employee's manager's id?",
+        },
+      ])
+      .then(employeeData => {
+        const employee = [employeeData.first_name, employeeData.last_name, employeeData.role_id, employeeData.manager_id, employeeData.employee_id]
+        db.query(sql, employee, (err, result) => {
+          if (err) {
+            console.log(err)
+            return;
+          }
+          console.table(result)
+        });
+        
+      })}
+
   });
   };
   
@@ -124,18 +238,18 @@ promptProject();
 //       body.manager_id
 //     ];
   
-//     db.query(sql, params, (err, result) => {
-//       if (err) {
-//         res.status(400).json({ error: err.message });
-//         return;
-//       }
-//       res.json({
-//         message: 'success',
-//         data: body,
-//         changes: result.affectedRows
-//       });
-//     });
-//   });
+  //   db.query(sql, params, (err, result) => {
+  //     if (err) {
+  //       res.status(400).json({ error: err.message });
+  //       return;
+  //     }
+  //     res.json({
+  //       message: 'success',
+  //       data: body,
+  //       changes: result.affectedRows
+  //     });
+  //   });
+  // });
 
 //     // Create a role (id, title, salary, department_id)
 // app.post('/api/role', ({ body }, res) => {
